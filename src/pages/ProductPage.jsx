@@ -3,25 +3,14 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';
-import { ArrowRight, ShoppingCart, Truck, Download, Package, Check, Minus, Plus } from 'lucide-react';
+import { ArrowRight, Mail, Download, Package } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-
-const shippingLabels = {
-  'דואר': { label: 'דואר ישראל', icon: Package },
-  'שליח': { label: 'שליח עד הבית', icon: Truck },
-  'איסוף_עצמי': { label: 'איסוף עצמי', icon: Check }
-};
 
 export default function ProductPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
   
-  const [quantity, setQuantity] = useState(1);
-  const [selectedShipping, setSelectedShipping] = useState('');
   const [selectedImage, setSelectedImage] = useState(0);
 
   const { data: product, isLoading } = useQuery({
@@ -66,13 +55,6 @@ export default function ProductPage() {
 
   const allImages = [product.image_url, ...(product.gallery || [])].filter(Boolean);
   const currentPrice = product.sale_price || product.price;
-  const totalPrice = currentPrice * quantity;
-
-  const handleBuy = () => {
-    // Navigate to checkout with product info
-    const checkoutUrl = `${createPageUrl('Checkout')}?product=${productId}&quantity=${quantity}&shipping=${selectedShipping}`;
-    window.location.href = checkoutUrl;
-  };
 
   return (
     <div className="min-h-screen bg-[#f8f6f3]">
@@ -164,84 +146,24 @@ export default function ProductPage() {
                 </p>
               )}
 
-              {/* Quantity */}
-              {product.product_type === 'physical' && (
-                <div className="mb-6">
-                  <Label className="text-[#1e3a5f] font-medium mb-2 block">כמות</Label>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-12 text-center text-lg font-semibold">{quantity}</span>
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Shipping Options - Physical Products */}
-              {product.product_type === 'physical' && product.shipping_methods?.length > 0 && (
-                <div className="mb-6">
-                  <Label className="text-[#1e3a5f] font-medium mb-3 block">שיטת משלוח</Label>
-                  <RadioGroup value={selectedShipping} onValueChange={setSelectedShipping}>
-                    {product.shipping_methods.map((method) => {
-                      const methodInfo = shippingLabels[method];
-                      const Icon = methodInfo?.icon || Package;
-                      return (
-                        <div key={method} className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-[#4a90a4] transition-colors">
-                          <RadioGroupItem value={method} id={method} />
-                          <Label htmlFor={method} className="flex-1 flex items-center gap-3 cursor-pointer">
-                            <Icon className="w-5 h-5 text-slate-400" />
-                            <span>{methodInfo?.label || method}</span>
-                          </Label>
-                          {product.shipping_cost > 0 && method !== 'איסוף_עצמי' && (
-                            <span className="text-sm text-slate-500">₪{product.shipping_cost}</span>
-                          )}
-                          {method === 'איסוף_עצמי' && (
-                            <span className="text-sm text-green-600">חינם</span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </RadioGroup>
-                  {product.delivery_time && (
-                    <p className="text-sm text-slate-500 mt-2">
-                      זמן משלוח משוער: {product.delivery_time}
-                    </p>
-                  )}
-                </div>
-              )}
-
               {/* Digital Product Info */}
               {product.product_type === 'digital' && (
                 <div className="mb-6 p-4 bg-blue-50 rounded-lg">
                   <div className="flex items-center gap-2 text-[#4a90a4]">
                     <Download className="w-5 h-5" />
-                    <span className="font-medium">מוצר דיגיטלי - קישור להורדה ישלח במייל לאחר הרכישה</span>
+                    <span className="font-medium">מוצר דיגיטלי</span>
                   </div>
                 </div>
               )}
 
-              {/* Total & Buy Button */}
               <div className="border-t border-slate-100 pt-6">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-slate-600">סה״כ לתשלום:</span>
-                  <span className="text-2xl font-bold text-[#1e3a5f]">₪{totalPrice}</span>
-                </div>
-                <Button
-                  onClick={handleBuy}
-                  className="w-full h-14 bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white rounded-xl text-lg font-medium"
+                <a
+                  href={`mailto:guyamir17@gmail.com?subject=${encodeURIComponent(`התעניינות במוצר - ${product.name}`)}`}
+                  className="inline-flex w-full h-14 items-center justify-center bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white rounded-xl text-lg font-medium"
                 >
-                  <ShoppingCart className="w-5 h-5 ml-2" />
-                  לרכישה
-                </Button>
+                  <Mail className="w-5 h-5 ml-2" />
+                  לפרטים והזמנה
+                </a>
               </div>
             </div>
 

@@ -3,10 +3,9 @@
 Static React app prepared for GitHub Pages. The app has no external app
 platform dependency at runtime or build time.
 
-Content is served from local seeded data in `src/api/localData.js`. Edits made
-through admin screens are saved to the visitor's browser `localStorage`, so
-they are useful for local/static editing previews but are not shared between
-users.
+Content is served from source-controlled static data in `src/api/localData.js`.
+The published site is read-only: contact, newsletter, and product actions use
+plain email links instead of backend submissions.
 
 ## Development
 

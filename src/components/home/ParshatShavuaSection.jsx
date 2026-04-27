@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';
-import { ArrowLeft, Clock, BookOpen, Pencil, Check, X } from 'lucide-react';
+import { ArrowLeft, Clock, BookOpen } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HebrewCalendar, HDate } from '@hebcal/core';
 import { format } from 'date-fns';
@@ -77,24 +77,8 @@ function getCurrentParasha() {
 export default function ParshatShavuaSection() {
   const currentParasha = getCurrentParasha();
 
-  // Check if current user is admin
-  const [isAdmin, setIsAdmin] = useState(false);
-  useEffect(() => {
-    staticClient.auth.me().then(user => {
-      if (user?.role === 'admin') setIsAdmin(true);
-    }).catch(() => {});
-  }, []);
-
-  // Editable section title + description (admin only)
-  const [editing, setEditing] = useState(false);
-  const [sectionTitle, setSectionTitle] = useState('מאמרים לפרשת השבוע');
-  const [titleDraft, setTitleDraft] = useState(sectionTitle);
-
-  // Editable sidebar card text (admin only)
-  const [editingCard, setEditingCard] = useState(false);
+  const sectionTitle = 'מאמרים לפרשת השבוע';
   const defaultCardText = (name) => `קראו את המאמרים המומלצים שלנו על ${name}. דברי תורה, פירושים וסיפורים.`;
-  const [cardText, setCardText] = useState('');
-  const [cardTextDraft, setCardTextDraft] = useState('');
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['parshatShavuaArticles', currentParasha.dbKey],
@@ -131,44 +115,10 @@ export default function ParshatShavuaSection() {
     <section className="py-10 bg-[#f4f6fb]">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
 
-        {/* Section header with editable title */}
+        {/* Section header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            {isAdmin && editing ? (
-              <div className="flex items-center gap-2">
-                <input
-                  value={titleDraft}
-                  onChange={e => setTitleDraft(e.target.value)}
-                  className="text-xl font-extrabold text-[#1e3a5f] border-b-2 border-[#4a90a4] bg-transparent outline-none w-64"
-                  autoFocus
-                />
-                <button
-                  onClick={() => { setSectionTitle(titleDraft); setEditing(false); }}
-                  className="text-green-600 hover:text-green-700 p-1"
-                >
-                  <Check className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => { setTitleDraft(sectionTitle); setEditing(false); }}
-                  className="text-red-400 hover:text-red-600 p-1"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-extrabold text-[#1e3a5f]">{sectionTitle}</h2>
-                {isAdmin && (
-                  <button
-                    onClick={() => { setTitleDraft(sectionTitle); setEditing(true); }}
-                    className="text-slate-400 hover:text-[#4a90a4] transition-colors p-1"
-                    title="ערוך כותרת"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            )}
+            <h2 className="text-2xl font-extrabold text-[#1e3a5f]">{sectionTitle}</h2>
           </div>
           <Link to={createPageUrl('ParshatShavua')} className="flex items-center gap-1 text-[#4a90a4] text-sm font-medium hover:gap-2 transition-all">
             לכל הפרשות <ArrowLeft className="w-4 h-4" />
@@ -200,35 +150,10 @@ export default function ParshatShavuaSection() {
               </div>
             )}
 
-            {/* Editable card description */}
             <div className="flex-1 mb-4">
-              {isAdmin && editingCard ? (
-                <div className="flex flex-col gap-2">
-                  <textarea
-                    value={cardTextDraft}
-                    onChange={e => setCardTextDraft(e.target.value)}
-                    className="text-slate-500 text-sm leading-relaxed border border-[#4a90a4] rounded-lg p-2 w-full resize-none outline-none"
-                    rows={3}
-                    dir="rtl"
-                    autoFocus
-                  />
-                  <div className="flex gap-2">
-                    <button onClick={() => { setCardText(cardTextDraft); setEditingCard(false); }} className="text-green-600 hover:text-green-700 p-1"><Check className="w-4 h-4" /></button>
-                    <button onClick={() => setEditingCard(false)} className="text-red-400 hover:text-red-600 p-1"><X className="w-4 h-4" /></button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-start gap-1">
-                  <p className="text-slate-500 text-sm leading-relaxed">
-                    {cardText || defaultCardText(currentParasha.displayName)}
-                  </p>
-                  {isAdmin && (
-                    <button onClick={() => { setCardTextDraft(cardText || defaultCardText(currentParasha.displayName)); setEditingCard(true); }} className="text-slate-300 hover:text-[#4a90a4] p-0.5 flex-shrink-0">
-                      <Pencil className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              )}
+              <p className="text-slate-500 text-sm leading-relaxed">
+                {defaultCardText(currentParasha.displayName)}
+              </p>
             </div>
 
             <Link

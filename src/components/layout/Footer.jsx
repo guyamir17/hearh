@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';
-import { Mail, Phone, MapPin, Send, Loader2, Check } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import LightbulbLogo from '@/components/shared/LightbulbLogo';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
   const { data: settings } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
@@ -18,22 +14,6 @@ export default function Footer() {
       return all[0] || {};
     }
   });
-
-  const subscribeMutation = useMutation({
-    mutationFn: async (email) => {
-      await staticClient.entities.Subscriber.create({ email, subscribed: true });
-    },
-    onSuccess: () => {
-      setSubscribed(true);
-      setEmail('');
-      setTimeout(() => setSubscribed(false), 4000);
-    }
-  });
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (email) subscribeMutation.mutate(email);
-  };
 
   const categoryLinks = [
     { name: 'פרשת שבוע', page: 'ParshatShavua' },
@@ -62,32 +42,13 @@ export default function Footer() {
             <p className="text-white/70 text-[15px] mb-4 leading-relaxed">
               הירשמו לקבלת מאמרים ותכנים חדשים ישירות למייל
             </p>
-            <form onSubmit={handleSubscribe} className="flex gap-2 max-w-xs mx-auto md:mx-0">
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="כתובת אימייל"
-                className="flex-1 h-11 bg-white/10 border-white/20 text-white placeholder:text-white/50 rounded-lg text-[15px]"
-                dir="ltr"
-              />
-              <button
-                type="submit"
-                disabled={subscribeMutation.isPending || subscribed}
-                className="h-11 w-11 bg-[#4a90a4] hover:bg-[#5aa0b4] rounded-lg transition-colors flex items-center justify-center flex-shrink-0"
-              >
-                {subscribeMutation.isPending ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : subscribed ? (
-                  <Check className="w-5 h-5" />
-                ) : (
-                  <Send className="w-5 h-5" />
-                )}
-              </button>
-            </form>
-            {subscribed && (
-              <p className="text-[#4a90a4] text-sm mt-2">נרשמת בהצלחה!</p>
-            )}
+            <a
+              href="mailto:guyamir17@gmail.com?subject=%D7%94%D7%A8%D7%A9%D7%9E%D7%94%20%D7%9C%D7%A2%D7%93%D7%9B%D7%95%D7%A0%D7%99%D7%9D%20-%20%D7%94%D7%90%D7%A8%D7%94"
+              className="inline-flex items-center gap-2 h-11 px-4 bg-[#4a90a4] hover:bg-[#5aa0b4] rounded-lg transition-colors text-[15px]"
+            >
+              <Send className="w-4 h-4" />
+              הרשמה במייל
+            </a>
           </div>
 
           {/* Column 2: Categories */}

@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
-import { Mail, Loader2, Check } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { Mail } from 'lucide-react';
 import { staticClient } from '@/api/staticClient';
 import { useQuery } from '@tanstack/react-query';
 
 export default function NewsletterSection() {
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-
   const { data: homeSettings } = useQuery({
     queryKey: ['homePageSettings'],
     queryFn: async () => {
@@ -20,31 +13,8 @@ export default function NewsletterSection() {
   });
 
   const newsletterTitle = homeSettings?.newsletter_title || 'רוצים לקבל את מאמרי השבת?';
-  const newsletterSubtitle = homeSettings?.newsletter_subtitle || 'הירשמו לקבלת עדכונים על מאמרים חדשים ותכנים מיוחדים ישירות לתיבת המייל';
-  const newsletterButtonText = homeSettings?.newsletter_button_text || 'הרשמה';
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email) return;
-
-    setLoading(true);
-    setError('');
-    
-    try {
-      await staticClient.entities.Subscriber.create({ email, subscribed: true });
-      // Send notification email to admin
-      await staticClient.integrations.Core.SendEmail({
-        to: 'guyamir17@gmail.com',
-        subject: 'נרשם חדש לאתר הארה',
-        body: `שלום גיא-שלום,\n\nהתקבלה הרשמה חדשה לרשימת התפוצה:\n\nאימייל: ${email}\n\nבברכה,\nמערכת הארה`
-      });
-      setSuccess(true);
-      setEmail('');
-    } catch (err) {
-      setError('אירעה שגיאה, נסו שוב');
-    }
-    setLoading(false);
-  };
+  const newsletterSubtitle = homeSettings?.newsletter_subtitle || 'לקבלת עדכונים על מאמרים חדשים ותכנים מיוחדים, כתבו לנו ונצרף אתכם לרשימת התפוצה';
+  const newsletterButtonText = homeSettings?.newsletter_button_text || 'שליחת בקשה במייל';
 
   return (
     <section className="py-16 lg:py-20 bg-gradient-to-br from-[#f8f6f3] to-[#f0ebe3]">
@@ -66,39 +36,12 @@ export default function NewsletterSection() {
           {newsletterSubtitle}
         </p>
 
-        {success ? (
-          <div className="flex items-center justify-center gap-2 text-green-600 bg-green-50 rounded-xl py-5 px-6">
-            <Check className="w-5 h-5" />
-            <span className="font-medium">תודה! נרשמתם בהצלחה לרשימת התפוצה</span>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <Input
-              type="email"
-              placeholder="כתובת אימייל"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 h-12 bg-white border-0 rounded-xl shadow-sm focus:ring-2 focus:ring-[#4a90a4] text-right"
-              dir="rtl"
-              required
-            />
-            <Button
-              type="submit"
-              disabled={loading}
-              className="h-12 px-8 bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all"
-            >
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                newsletterButtonText
-              )}
-            </Button>
-          </form>
-        )}
-
-        {error && (
-          <p className="text-red-500 mt-3 text-sm">{error}</p>
-        )}
+        <a
+          href="mailto:guyamir17@gmail.com?subject=%D7%94%D7%A8%D7%A9%D7%9E%D7%94%20%D7%9C%D7%A8%D7%A9%D7%99%D7%9E%D7%AA%20%D7%94%D7%AA%D7%A4%D7%95%D7%A6%D7%94%20-%20%D7%94%D7%90%D7%A8%D7%94"
+          className="inline-flex h-12 items-center justify-center px-8 bg-[#1e3a5f] hover:bg-[#2a4a6f] text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all"
+        >
+          {newsletterButtonText}
+        </a>
       </div>
     </section>
   );
