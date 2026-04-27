@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ArrowLeft, Clock, BookOpen, Pencil, Check, X } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HebrewCalendar, HDate } from '@hebcal/core';
@@ -80,7 +80,7 @@ export default function ParshatShavuaSection() {
   // Check if current user is admin
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
-    base44.auth.me().then(user => {
+    staticClient.auth.me().then(user => {
       if (user?.role === 'admin') setIsAdmin(true);
     }).catch(() => {});
   }, []);
@@ -102,7 +102,7 @@ export default function ParshatShavuaSection() {
     queryFn: async () => {
       if (!currentParasha.dbKey) return [];
       // Only fetch articles for THIS specific parasha — no fallback to other parashiyot
-      const results = await base44.entities.Article.filter(
+      const results = await staticClient.entities.Article.filter(
         { published: true, category: 'פרשת_שבוע', parasha_name: currentParasha.dbKey },
         '-created_date',
         6

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import mammoth from 'mammoth';
 import { createPageUrl } from '@/utils';
 import { 
@@ -170,7 +170,7 @@ export default function BulkArticleUpload({ onComplete }) {
           published: false
         };
         
-        const created = await base44.entities.Article.create(articleData);
+        const created = await staticClient.entities.Article.create(articleData);
         
         newResults.push({
           filename: file.name,
@@ -205,7 +205,7 @@ export default function BulkArticleUpload({ onComplete }) {
     const successResults = results.filter(r => r.status === 'success' && !r.published);
     
     for (const result of successResults) {
-      await base44.entities.Article.update(result.articleId, { published: true });
+      await staticClient.entities.Article.update(result.articleId, { published: true });
       result.published = true;
     }
     

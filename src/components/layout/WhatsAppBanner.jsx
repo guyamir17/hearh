@@ -1,13 +1,13 @@
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 
 export default function WhatsAppBanner() {
   const { data: settings } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
-      const all = await base44.entities.SiteSettings.list();
+      const all = await staticClient.entities.SiteSettings.list();
       return all[0] || {};
     }
   });

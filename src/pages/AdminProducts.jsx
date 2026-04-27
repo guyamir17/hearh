@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { 
   Plus, Search, Edit2, Trash2, Eye, EyeOff, 
   MoreVertical, Loader2, Package, ShoppingBag
@@ -44,14 +44,14 @@ export default function AdminProducts() {
   const { data: products, isLoading } = useQuery({
     queryKey: ['adminProducts'],
     queryFn: async () => {
-      const all = await base44.entities.Product.list('-created_date');
+      const all = await staticClient.entities.Product.list('-created_date');
       return all;
     }
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await base44.entities.Product.delete(id);
+      await staticClient.entities.Product.delete(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminProducts'] });
@@ -61,7 +61,7 @@ export default function AdminProducts() {
 
   const togglePublishMutation = useMutation({
     mutationFn: async ({ id, published }) => {
-      await base44.entities.Product.update(id, { published: !published });
+      await staticClient.entities.Product.update(id, { published: !published });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminProducts'] });

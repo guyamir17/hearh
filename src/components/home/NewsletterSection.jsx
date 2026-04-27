@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Loader2, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { useQuery } from '@tanstack/react-query';
 
 export default function NewsletterSection() {
@@ -14,7 +14,7 @@ export default function NewsletterSection() {
   const { data: homeSettings } = useQuery({
     queryKey: ['homePageSettings'],
     queryFn: async () => {
-      const all = await base44.entities.HomePageSettings.list();
+      const all = await staticClient.entities.HomePageSettings.list();
       return all[0] || {};
     }
   });
@@ -31,9 +31,9 @@ export default function NewsletterSection() {
     setError('');
     
     try {
-      await base44.entities.Subscriber.create({ email, subscribed: true });
+      await staticClient.entities.Subscriber.create({ email, subscribed: true });
       // Send notification email to admin
-      await base44.integrations.Core.SendEmail({
+      await staticClient.integrations.Core.SendEmail({
         to: 'guyamir17@gmail.com',
         subject: 'נרשם חדש לאתר הארה',
         body: `שלום גיא-שלום,\n\nהתקבלה הרשמה חדשה לרשימת התפוצה:\n\nאימייל: ${email}\n\nבברכה,\nמערכת הארה`

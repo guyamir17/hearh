@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ShoppingBag, ShoppingCart } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -21,7 +21,7 @@ export default function Shop() {
   const { data: categorySettings } = useQuery({
     queryKey: ['categorySettings'],
     queryFn: async () => {
-      return await base44.entities.CategorySettings.list();
+      return await staticClient.entities.CategorySettings.list();
     }
   });
 
@@ -34,7 +34,7 @@ export default function Shop() {
     staleTime: 10 * 60 * 1000,
     cacheTime: 15 * 60 * 1000,
     queryFn: async () => {
-      const all = await base44.entities.Product.filter({ published: true });
+      const all = await staticClient.entities.Product.filter({ published: true });
       return all;
     }
   });

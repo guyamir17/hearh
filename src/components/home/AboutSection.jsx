@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ArrowLeft } from 'lucide-react';
 
 export default function AboutSection() {
   const { data: settings } = useQuery({
     queryKey: ['aboutSettings'],
     queryFn: async () => {
-      const all = await base44.entities.AboutSettings.list();
+      const all = await staticClient.entities.AboutSettings.list();
       return all[0] || {};
     }
   });

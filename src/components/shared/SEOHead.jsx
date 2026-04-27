@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 
 export default function SEOHead({ 
   title,
@@ -16,7 +16,7 @@ export default function SEOHead({
 }) {
   const { data: siteSettings } = useQuery({
     queryKey: ['siteSettings'],
-    queryFn: () => base44.entities.SiteSettings.list(),
+    queryFn: () => staticClient.entities.SiteSettings.list(),
     staleTime: 10 * 60 * 1000,
   });
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { 
   Settings, Save, Loader2, Phone, Mail, MapPin, 
   MessageCircle, Globe, Check, Image, Upload
@@ -47,7 +47,7 @@ export default function AdminSettings() {
   const { data: settings, isLoading } = useQuery({
     queryKey: ['adminSiteSettings'],
     queryFn: async () => {
-      const all = await base44.entities.SiteSettings.list();
+      const all = await staticClient.entities.SiteSettings.list();
       return all[0];
     }
   });
@@ -81,9 +81,9 @@ export default function AdminSettings() {
   const saveMutation = useMutation({
     mutationFn: async (data) => {
       if (settings?.id) {
-        await base44.entities.SiteSettings.update(settings.id, data);
+        await staticClient.entities.SiteSettings.update(settings.id, data);
       } else {
-        await base44.entities.SiteSettings.create(data);
+        await staticClient.entities.SiteSettings.create(data);
       }
     },
     onSuccess: () => {
@@ -175,7 +175,7 @@ export default function AdminSettings() {
                   onChange={async (e) => {
                     const file = e.target.files[0];
                     if (file) {
-                      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                      const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
                       setFormData({...formData, hero_image_url: file_url});
                     }
                   }}

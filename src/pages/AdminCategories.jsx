@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -47,7 +47,7 @@ export default function AdminCategories() {
   const { data: categories, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const result = await base44.entities.Category.list();
+      const result = await staticClient.entities.Category.list();
       return result.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     }
   });
@@ -55,9 +55,9 @@ export default function AdminCategories() {
   const saveMutation = useMutation({
     mutationFn: async (data) => {
       if (editingCategory) {
-        return await base44.entities.Category.update(editingCategory.id, data);
+        return await staticClient.entities.Category.update(editingCategory.id, data);
       } else {
-        return await base44.entities.Category.create(data);
+        return await staticClient.entities.Category.create(data);
       }
     },
     onSuccess: () => {
@@ -71,7 +71,7 @@ export default function AdminCategories() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await base44.entities.Category.delete(id);
+      await staticClient.entities.Category.delete(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });

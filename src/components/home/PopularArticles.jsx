@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { TrendingUp, Clock, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -19,9 +19,9 @@ export default function PopularArticles() {
     queryKey: ['popularArticles'],
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
-      const featured = await base44.entities.Article.filter({ published: true, is_featured: true }, '-created_date', 6);
+      const featured = await staticClient.entities.Article.filter({ published: true, is_featured: true }, '-created_date', 6);
       if (featured.length >= 6) return featured.slice(0, 6);
-      const recent = await base44.entities.Article.filter({ published: true }, '-created_date', 6);
+      const recent = await staticClient.entities.Article.filter({ published: true }, '-created_date', 6);
       return [...featured, ...recent.filter(a => !featured.find(f => f.id === a.id))].slice(0, 6);
     }
   });

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Menu, ChevronDown, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import MobileMenu from './MobileMenu';
 import SearchModal from './SearchModal';
 import LightbulbLogo from '@/components/shared/LightbulbLogo';
@@ -77,7 +77,7 @@ export default function Header() {
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const result = await base44.entities.Category.list();
+      const result = await staticClient.entities.Category.list();
       return result.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     },
     staleTime: 5 * 60 * 1000

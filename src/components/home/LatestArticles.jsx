@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const categoryLabels = {
@@ -20,7 +20,7 @@ export default function LatestArticles() {
     staleTime: 2 * 60 * 1000,
     cacheTime: 5 * 60 * 1000,
     queryFn: async () => {
-      const all = await base44.entities.Article.filter({ published: true }, '-created_date', 6);
+      const all = await staticClient.entities.Article.filter({ published: true }, '-created_date', 6);
       return all;
     }
   });

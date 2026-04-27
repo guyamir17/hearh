@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Search, ArrowLeft, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -15,7 +15,7 @@ export default function HeroSection() {
   const { data: settings, isLoading: settingsLoading } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
-      const all = await base44.entities.SiteSettings.list();
+      const all = await staticClient.entities.SiteSettings.list();
       return all[0] || {};
     }
   });
@@ -23,7 +23,7 @@ export default function HeroSection() {
   const { data: homeSettings } = useQuery({
     queryKey: ['homePageSettings'],
     queryFn: async () => {
-      const all = await base44.entities.HomePageSettings.list();
+      const all = await staticClient.entities.HomePageSettings.list();
       return all[0] || {};
     }
   });
@@ -43,7 +43,7 @@ export default function HeroSection() {
       }
       
       setIsSearching(true);
-      const all = await base44.entities.Article.filter({ published: true });
+      const all = await staticClient.entities.Article.filter({ published: true });
       const results = all.filter(article =>
         article.title?.includes(searchQuery) ||
         article.excerpt?.includes(searchQuery)

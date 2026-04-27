@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -49,7 +49,7 @@ export default function AdminAboutPage() {
   const { data: settings } = useQuery({
     queryKey: ['aboutPageSettings'],
     queryFn: async () => {
-      const all = await base44.entities.AboutPageSettings.list();
+      const all = await staticClient.entities.AboutPageSettings.list();
       return all[0] || null;
     }
   });
@@ -61,9 +61,9 @@ export default function AdminAboutPage() {
   const mutation = useMutation({
     mutationFn: async (data) => {
       if (settings?.id) {
-        return base44.entities.AboutPageSettings.update(settings.id, data);
+        return staticClient.entities.AboutPageSettings.update(settings.id, data);
       } else {
-        return base44.entities.AboutPageSettings.create(data);
+        return staticClient.entities.AboutPageSettings.create(data);
       }
     },
     onSuccess: () => {
@@ -75,7 +75,7 @@ export default function AdminAboutPage() {
 
   const handleImageUpload = async (key, file) => {
     setUploadingKey(key);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
     setForm(prev => ({ ...prev, [key]: file_url }));
     setUploadingKey(null);
   };

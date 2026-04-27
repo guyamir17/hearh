@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Search, Filter, Clock, ArrowLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,7 +25,7 @@ export default function AllArticles() {
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     queryFn: async () => {
-      const all = await base44.entities.Article.filter({ published: true }, '-created_date');
+      const all = await staticClient.entities.Article.filter({ published: true }, '-created_date');
       return all;
     }
   });

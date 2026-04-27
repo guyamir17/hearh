@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { BookOpen, ArrowRight, Clock, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -20,7 +20,7 @@ export default function ParshaArticles() {
         parasha_book: book,
         parasha_name: parsha
       };
-      return await base44.entities.Article.filter(filter, '-created_date');
+      return await staticClient.entities.Article.filter(filter, '-created_date');
     },
     enabled: !!book && !!parsha
   });

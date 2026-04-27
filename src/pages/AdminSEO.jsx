@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,7 +14,7 @@ export default function AdminSEO() {
   const { data: siteSettings, isLoading } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
-      const result = await base44.entities.SiteSettings.list();
+      const result = await staticClient.entities.SiteSettings.list();
       if (result && result.length > 0) {
         setSettings(result[0]);
         return result;
@@ -26,9 +26,9 @@ export default function AdminSEO() {
   const updateMutation = useMutation({
     mutationFn: async (data) => {
       if (settings?.id) {
-        return await base44.entities.SiteSettings.update(settings.id, data);
+        return await staticClient.entities.SiteSettings.update(settings.id, data);
       } else {
-        return await base44.entities.SiteSettings.create(data);
+        return await staticClient.entities.SiteSettings.create(data);
       }
     },
     onSuccess: () => {

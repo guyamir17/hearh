@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -11,7 +11,7 @@ export default function AdminInitCategories() {
   const { data: existingCategories } = useQuery({
     queryKey: ['categories-check'],
     queryFn: async () => {
-      return await base44.entities.Category.list();
+      return await staticClient.entities.Category.list();
     }
   });
 
@@ -71,7 +71,7 @@ export default function AdminInitCategories() {
       ];
 
       for (const cat of defaultCategories) {
-        await base44.entities.Category.create(cat);
+        await staticClient.entities.Category.create(cat);
       }
     },
     onSuccess: () => {

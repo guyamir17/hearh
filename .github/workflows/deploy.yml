@@ -33,9 +33,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_BASE44_APP_ID: ${{ vars.VITE_BASE44_APP_ID }}
-          VITE_BASE44_BACKEND_URL: ${{ vars.VITE_BASE44_BACKEND_URL || 'https://base44.app' }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

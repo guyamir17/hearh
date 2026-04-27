@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,7 @@ export default function AdminHomeSettings() {
   const { data: settings } = useQuery({
     queryKey: ['homePageSettings'],
     queryFn: async () => {
-      const all = await base44.entities.HomePageSettings.list();
+      const all = await staticClient.entities.HomePageSettings.list();
       return all[0] || null;
     }
   });
@@ -59,9 +59,9 @@ export default function AdminHomeSettings() {
   const mutation = useMutation({
     mutationFn: async (data) => {
       if (settings?.id) {
-        return base44.entities.HomePageSettings.update(settings.id, data);
+        return staticClient.entities.HomePageSettings.update(settings.id, data);
       } else {
-        return base44.entities.HomePageSettings.create(data);
+        return staticClient.entities.HomePageSettings.create(data);
       }
     },
     onSuccess: () => {
@@ -73,7 +73,7 @@ export default function AdminHomeSettings() {
 
   const handleImageUpload = async (key, file) => {
     setUploadingKey(key);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
     setForm(prev => ({ ...prev, [key]: file_url }));
     setUploadingKey(null);
   };

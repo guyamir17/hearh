@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Save, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,7 +25,7 @@ export default function AdminCategorySettings() {
   const { data: settings, isLoading } = useQuery({
     queryKey: ['categorySettings'],
     queryFn: async () => {
-      return await base44.entities.CategorySettings.list();
+      return await staticClient.entities.CategorySettings.list();
     }
   });
 
@@ -49,12 +49,12 @@ export default function AdminCategorySettings() {
       for (const cat of categories) {
         const data = formData[cat.key];
         if (data.id) {
-          await base44.entities.CategorySettings.update(data.id, {
+          await staticClient.entities.CategorySettings.update(data.id, {
             title: data.title,
             description: data.description
           });
         } else {
-          await base44.entities.CategorySettings.create({
+          await staticClient.entities.CategorySettings.create({
             category_key: cat.key,
             title: data.title,
             description: data.description

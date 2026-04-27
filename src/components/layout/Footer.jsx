@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Mail, Phone, MapPin, Send, Loader2, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import LightbulbLogo from '@/components/shared/LightbulbLogo';
@@ -14,14 +14,14 @@ export default function Footer() {
   const { data: settings } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
-      const all = await base44.entities.SiteSettings.list();
+      const all = await staticClient.entities.SiteSettings.list();
       return all[0] || {};
     }
   });
 
   const subscribeMutation = useMutation({
     mutationFn: async (email) => {
-      await base44.entities.Subscriber.create({ email, subscribed: true });
+      await staticClient.entities.Subscriber.create({ email, subscribed: true });
     },
     onSuccess: () => {
       setSubscribed(true);

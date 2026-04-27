@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { 
   Plus, Pencil, Trash2, ExternalLink, MoreVertical, 
   Loader2, Check, Eye, EyeOff, GripVertical 
@@ -45,16 +45,16 @@ export default function AdminExternalArticles() {
   const { data: articles, isLoading } = useQuery({
     queryKey: ['adminExternalArticles'],
     queryFn: async () => {
-      return await base44.entities.ExternalArticle.list('display_order');
+      return await staticClient.entities.ExternalArticle.list('display_order');
     }
   });
 
   const saveMutation = useMutation({
     mutationFn: async (data) => {
       if (editingArticle) {
-        await base44.entities.ExternalArticle.update(editingArticle.id, data);
+        await staticClient.entities.ExternalArticle.update(editingArticle.id, data);
       } else {
-        await base44.entities.ExternalArticle.create(data);
+        await staticClient.entities.ExternalArticle.create(data);
       }
     },
     onSuccess: () => {
@@ -66,7 +66,7 @@ export default function AdminExternalArticles() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await base44.entities.ExternalArticle.delete(id);
+      await staticClient.entities.ExternalArticle.delete(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminExternalArticles'] });
@@ -76,7 +76,7 @@ export default function AdminExternalArticles() {
 
   const togglePublishMutation = useMutation({
     mutationFn: async ({ id, published }) => {
-      await base44.entities.ExternalArticle.update(id, { published });
+      await staticClient.entities.ExternalArticle.update(id, { published });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminExternalArticles'] });
@@ -120,7 +120,7 @@ export default function AdminExternalArticles() {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
       setFormData({ ...formData, image_url: file_url });
     }
   };
@@ -289,7 +289,7 @@ export default function AdminExternalArticles() {
                   // Try to fetch OG image when URL is pasted
                   if (url && url.startsWith('http') && !formData.image_url) {
                     try {
-                      const response = await base44.integrations.Core.InvokeLLM({
+                      const response = await staticClient.integrations.Core.InvokeLLM({
                         prompt: `Extract the Open Graph image URL from this webpage: ${url}. Return only the image URL, nothing else. If you can't find one, return "none".`,
                         add_context_from_internet: true
                       });

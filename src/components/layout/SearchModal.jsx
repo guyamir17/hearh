@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { X, Search, Loader2 } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Input } from '@/components/ui/input';
 
 export default function SearchModal({ isOpen, onClose }) {
@@ -19,7 +19,7 @@ export default function SearchModal({ isOpen, onClose }) {
     const searchTimeout = setTimeout(async () => {
       setLoading(true);
       try {
-        const articles = await base44.entities.Article.filter({ published: true });
+        const articles = await staticClient.entities.Article.filter({ published: true });
         const filtered = articles.filter(article => 
           article.title?.includes(query) ||
           article.excerpt?.includes(query) ||

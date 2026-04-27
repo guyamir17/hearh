@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { 
   Plus, Search, Edit2, Trash2, Eye, EyeOff, Star, 
   MoreVertical, Loader2, FileText, Upload
@@ -45,14 +45,14 @@ export default function AdminArticles() {
   const { data: articles, isLoading } = useQuery({
     queryKey: ['adminArticles'],
     queryFn: async () => {
-      const all = await base44.entities.Article.list('-created_date');
+      const all = await staticClient.entities.Article.list('-created_date');
       return all;
     }
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await base44.entities.Article.delete(id);
+      await staticClient.entities.Article.delete(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminArticles'] });
@@ -62,7 +62,7 @@ export default function AdminArticles() {
 
   const togglePublishMutation = useMutation({
     mutationFn: async ({ id, published }) => {
-      await base44.entities.Article.update(id, { published: !published });
+      await staticClient.entities.Article.update(id, { published: !published });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminArticles'] });
@@ -71,7 +71,7 @@ export default function AdminArticles() {
 
   const toggleFeaturedMutation = useMutation({
     mutationFn: async ({ id, is_featured }) => {
-      await base44.entities.Article.update(id, { is_featured: !is_featured });
+      await staticClient.entities.Article.update(id, { is_featured: !is_featured });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminArticles'] });

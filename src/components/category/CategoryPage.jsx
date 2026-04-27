@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { Clock, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -28,13 +28,13 @@ export default function CategoryPage({
   // Fetch category settings
   const { data: categorySettings } = useQuery({
     queryKey: ['categorySettings'],
-    queryFn: async () => base44.entities.CategorySettings.list()
+    queryFn: async () => staticClient.entities.CategorySettings.list()
   });
 
   // Fetch all categories from DB to get dynamic subcategories
   const { data: allCategories } = useQuery({
     queryKey: ['categories'],
-    queryFn: async () => base44.entities.Category.list(),
+    queryFn: async () => staticClient.entities.Category.list(),
     staleTime: 5 * 60 * 1000
   });
 
@@ -75,7 +75,7 @@ export default function CategoryPage({
       if (activeFilter && filterField) {
         filter[filterField === 'book' ? 'parasha_book' : filterField === 'holiday' ? 'holiday' : 'lifecycle_event'] = activeFilter;
       }
-      const all = await base44.entities.Article.filter(filter, '-created_date');
+      const all = await staticClient.entities.Article.filter(filter, '-created_date');
       return all;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -85,7 +85,7 @@ export default function CategoryPage({
   const { data: featuredArticles } = useQuery({
     queryKey: ['categoryFeatured', category],
     queryFn: async () => {
-      const all = await base44.entities.Article.filter({ 
+      const all = await staticClient.entities.Article.filter({ 
         published: true, 
         category,
         is_featured: true 

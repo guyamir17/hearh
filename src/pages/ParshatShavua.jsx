@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { BookOpen } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 
 const books = [
   { name: 'בראשית', image: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80', description: 'מעשה בראשית ותולדות האבות' },
@@ -17,7 +17,7 @@ export default function ParshatShavua() {
   const { data: categorySettings } = useQuery({
     queryKey: ['categorySettings'],
     queryFn: async () => {
-      return await base44.entities.CategorySettings.list();
+      return await staticClient.entities.CategorySettings.list();
     }
   });
 

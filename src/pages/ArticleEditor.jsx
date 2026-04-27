@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { 
   ArrowRight, Save, Eye, Loader2, Upload, X, 
   Image as ImageIcon, Star, FileText, AlignJustify, FolderUp, Sparkles
@@ -120,7 +120,7 @@ export default function ArticleEditor() {
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const result = await base44.entities.Category.filter({ active: true });
+      const result = await staticClient.entities.Category.filter({ active: true });
       return result.length > 0 ? result.sort((a, b) => (a.display_order || 0) - (b.display_order || 0)) : defaultCategories;
     },
     initialData: defaultCategories
@@ -129,7 +129,7 @@ export default function ArticleEditor() {
   const { data: article, isLoading: articleLoading } = useQuery({
     queryKey: ['editArticle', articleId],
     queryFn: async () => {
-      const articles = await base44.entities.Article.filter({ id: articleId });
+      const articles = await staticClient.entities.Article.filter({ id: articleId });
       return articles[0];
     },
     enabled: isEditing
@@ -236,9 +236,9 @@ export default function ArticleEditor() {
       }
       
       if (isEditing) {
-        await base44.entities.Article.update(articleId, processedData);
+        await staticClient.entities.Article.update(articleId, processedData);
       } else {
-        await base44.entities.Article.create(processedData);
+        await staticClient.entities.Article.create(processedData);
       }
     },
     onSuccess: () => {
@@ -251,7 +251,7 @@ export default function ArticleEditor() {
     if (!file) return;
 
     setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
     // Auto-set og_image too if not already set
     setFormData(prev => ({ 
       ...prev, 
@@ -266,7 +266,7 @@ export default function ArticleEditor() {
     if (!file) return;
 
     setUploadingOg(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
     setFormData(prev => ({ ...prev, og_image: file_url }));
     setUploadingOg(false);
   };
@@ -328,7 +328,7 @@ export default function ArticleEditor() {
           return;
       }
       
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await staticClient.integrations.Core.InvokeLLM({
         prompt,
         response_json_schema: jsonSchema
       });
@@ -351,7 +351,7 @@ export default function ArticleEditor() {
     const torahContext = `הכותב הוא רב ומחנך יהודי. השפה צריכה להיות תורנית, מרוממת, ויחד עם זאת שיווקית ומזמינה – כזו שמושכת את הלב ומעוררת רצון לקרוא.`;
     
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await staticClient.integrations.Core.InvokeLLM({
         prompt: `${torahContext}\n\nלמאמר הבא, צור את כל השדות הבאים:\n\nכותרת: ${title}\n\nתוכן: ${content.slice(0, 1200)}\n\n1. מבוא (excerpt): שני משפטי פתיחה תורניים ובהירים, עמוקים ומזמינים לקריאה.\n2. seo_title: כותרת SEO עד 60 תווים, תורנית ושיווקית.\n3. seo_description: תיאור SEO עד 155 תווים, מושך ומעודד קליקים.\n4. seo_keywords: 6-8 מילות מפתח עבריות מופרדות בפסיקים.`,
         response_json_schema: {
           type: "object",

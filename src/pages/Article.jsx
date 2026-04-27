@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ArrowRight, Clock, Calendar, Tag, Copy, Check } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
@@ -105,7 +105,7 @@ export default function Article() {
   const { data: article, isLoading, error } = useQuery({
     queryKey: ['article', articleId],
     queryFn: async () => {
-      const articles = await base44.entities.Article.filter({ id: articleId });
+      const articles = await staticClient.entities.Article.filter({ id: articleId });
       return articles[0];
     },
     enabled: !!articleId
@@ -114,7 +114,7 @@ export default function Article() {
   const { data: relatedArticles } = useQuery({
     queryKey: ['relatedArticles', article?.category],
     queryFn: async () => {
-      const articles = await base44.entities.Article.filter({ 
+      const articles = await staticClient.entities.Article.filter({ 
         published: true, 
         category: article.category 
       }, '-created_date', 4);

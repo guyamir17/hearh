@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ExternalLink, Calendar } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
@@ -11,7 +11,7 @@ export default function ExternalArticlesSection() {
     staleTime: 10 * 60 * 1000,
     cacheTime: 15 * 60 * 1000,
     queryFn: async () => {
-      const all = await base44.entities.ExternalArticle.filter({ published: true }, 'display_order', 8);
+      const all = await staticClient.entities.ExternalArticle.filter({ published: true }, 'display_order', 8);
       return all;
     }
   });

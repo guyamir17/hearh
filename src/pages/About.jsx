@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { ArrowLeft, Heart, BookOpen, Users, Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import SEOHead from '@/components/shared/SEOHead';
 
 const defaults = {
@@ -33,7 +33,7 @@ export default function About() {
   const { data: rawSettings } = useQuery({
     queryKey: ['aboutPageSettings'],
     queryFn: async () => {
-      const all = await base44.entities.AboutPageSettings.list();
+      const all = await staticClient.entities.AboutPageSettings.list();
       return all[0] || {};
     }
   });

@@ -1,14 +1,12 @@
 # Hearh
 
-/*
- * TODO: PRE-DEPLOYMENT STEPS
- * Set the repository variable `VITE_BASE44_APP_ID` in GitHub:
- * Settings -> Secrets and variables -> Actions -> Variables.
- * The value must be the Base44 application ID for this exported app.
- * Optional: set `VITE_BASE44_BACKEND_URL`; it defaults to `https://base44.app`.
- */
+Static React app prepared for GitHub Pages. The app has no external app
+platform dependency at runtime or build time.
 
-Static React export prepared for GitHub Pages.
+Content is served from local seeded data in `src/api/localData.js`. Edits made
+through admin screens are saved to the visitor's browser `localStorage`, so
+they are useful for local/static editing previews but are not shared between
+users.
 
 ## Development
 

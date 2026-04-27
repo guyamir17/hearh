@@ -4,13 +4,13 @@ import { Mail, Phone, MapPin, Send, Loader2, Check, Clock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 
 export default function Contact() {
   const { data: settings } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
-      const all = await base44.entities.SiteSettings.list();
+      const all = await staticClient.entities.SiteSettings.list();
       return all[0] || {};
     }
   });
@@ -32,7 +32,7 @@ export default function Contact() {
     setError('');
 
     try {
-      await base44.entities.ContactMessage.create(formData);
+      await staticClient.entities.ContactMessage.create(formData);
       setSuccess(true);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {

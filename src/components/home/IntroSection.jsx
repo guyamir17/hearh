@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { BookOpen, Sparkles, Clock, Heart } from 'lucide-react';
 
 export default function IntroSection() {
   const { data: legacySettings } = useQuery({
     queryKey: ['introSectionSettings'],
     queryFn: async () => {
-      const all = await base44.entities.IntroSectionSettings.list();
+      const all = await staticClient.entities.IntroSectionSettings.list();
       return all[0] || {};
     }
   });
@@ -17,7 +17,7 @@ export default function IntroSection() {
   const { data: homeSettings } = useQuery({
     queryKey: ['homePageSettings'],
     queryFn: async () => {
-      const all = await base44.entities.HomePageSettings.list();
+      const all = await staticClient.entities.HomePageSettings.list();
       return all[0] || {};
     }
   });

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ArrowRight, CreditCard, Loader2, Check, ShoppingBag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -29,7 +29,7 @@ export default function Checkout() {
   const { data: product, isLoading } = useQuery({
     queryKey: ['checkoutProduct', productId],
     queryFn: async () => {
-      const products = await base44.entities.Product.filter({ id: productId });
+      const products = await staticClient.entities.Product.filter({ id: productId });
       return products[0];
     },
     enabled: !!productId
@@ -37,7 +37,7 @@ export default function Checkout() {
 
   const orderMutation = useMutation({
     mutationFn: async (orderData) => {
-      await base44.entities.Order.create(orderData);
+      await staticClient.entities.Order.create(orderData);
     },
     onSuccess: () => {
       setSuccess(true);

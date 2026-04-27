@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ArrowRight, ShoppingCart, Truck, Download, Package, Check, Minus, Plus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,7 @@ export default function ProductPage() {
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', productId],
     queryFn: async () => {
-      const products = await base44.entities.Product.filter({ id: productId });
+      const products = await staticClient.entities.Product.filter({ id: productId });
       return products[0];
     },
     enabled: !!productId

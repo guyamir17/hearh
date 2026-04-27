@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { 
   ArrowRight, Save, Eye, Loader2, Upload, X, 
   Image as ImageIcon, Package, Truck
@@ -63,7 +63,7 @@ export default function ProductEditor() {
   const { data: product, isLoading } = useQuery({
     queryKey: ['editProduct', productId],
     queryFn: async () => {
-      const products = await base44.entities.Product.filter({ id: productId });
+      const products = await staticClient.entities.Product.filter({ id: productId });
       return products[0];
     },
     enabled: isEditing
@@ -102,9 +102,9 @@ export default function ProductEditor() {
       };
       
       if (isEditing) {
-        await base44.entities.Product.update(productId, cleanData);
+        await staticClient.entities.Product.update(productId, cleanData);
       } else {
-        await base44.entities.Product.create(cleanData);
+        await staticClient.entities.Product.create(cleanData);
       }
     },
     onSuccess: () => {
@@ -118,7 +118,7 @@ export default function ProductEditor() {
 
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
       if (isGallery) {
         setFormData({ ...formData, gallery: [...formData.gallery, file_url] });
       } else {

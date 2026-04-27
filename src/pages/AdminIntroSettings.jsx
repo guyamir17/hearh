@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { staticClient } from '@/api/staticClient';
 import { ArrowRight, Save, Loader2, Upload, X, Eye } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,7 +16,7 @@ export default function AdminIntroSettings() {
   const { data: settings, isLoading } = useQuery({
     queryKey: ['introSectionSettings'],
     queryFn: async () => {
-      const all = await base44.entities.IntroSectionSettings.list();
+      const all = await staticClient.entities.IntroSectionSettings.list();
       return all[0] || null;
     }
   });
@@ -74,9 +74,9 @@ export default function AdminIntroSettings() {
   const saveMutation = useMutation({
     mutationFn: async (data) => {
       if (settings) {
-        await base44.entities.IntroSectionSettings.update(settings.id, data);
+        await staticClient.entities.IntroSectionSettings.update(settings.id, data);
       } else {
-        await base44.entities.IntroSectionSettings.create(data);
+        await staticClient.entities.IntroSectionSettings.create(data);
       }
     },
     onSuccess: () => {
@@ -91,7 +91,7 @@ export default function AdminIntroSettings() {
 
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await staticClient.integrations.Core.UploadFile({ file });
       setFormData({ ...formData, image_url: file_url });
     } catch (error) {
       console.error('Upload error:', error);
