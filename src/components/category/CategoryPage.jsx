@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -6,21 +6,12 @@ import { staticClient } from '@/api/staticClient';
 import { Clock, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const categoryLabels = {
-  'פרשת_שבוע': 'פרשת שבוע',
-  'מאמרים_באמונה': 'מאמרים באמונה',
-  'מועדי_ישראל': 'מועדי ישראל',
-  'עולם_הנפש': 'עולם הנפש',
-  'מעגל_החיים': 'מעגל החיים'
-};
-
 export default function CategoryPage({ 
   category, 
   title, 
   description, 
   icon: Icon,
   filterField: filterFieldProp,
-  filterValue,
   subcategories: staticSubcategories,
   hideFeatured = false,
   categoryKey

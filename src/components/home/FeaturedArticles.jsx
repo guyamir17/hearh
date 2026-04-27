@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { ArrowLeft, Clock, Eye } from 'lucide-react';
+import { ArrowLeft, Clock } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';
 import { Skeleton } from '@/components/ui/skeleton';

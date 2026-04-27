@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';
 import { ExternalLink, Calendar } from 'lucide-react';

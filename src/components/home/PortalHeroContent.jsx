@@ -1,9 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';
-import { Clock, ArrowLeft, Eye } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const categoryLabels = {

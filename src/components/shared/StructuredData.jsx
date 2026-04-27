@@ -1,4 +1,3 @@
-import React from 'react';
 
 export function ArticleStructuredData({ article, url }) {
   if (!article) return null;

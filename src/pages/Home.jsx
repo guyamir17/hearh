@@ -1,4 +1,3 @@
-import React from 'react';
 import HeroSection from '@/components/home/HeroSection';
 import PortalHeroContent from '@/components/home/PortalHeroContent';
 import CategoryGrid from '@/components/home/CategoryGrid';

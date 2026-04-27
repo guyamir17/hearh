@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -54,7 +54,6 @@ export default function ProductPage() {
   }
 
   const allImages = [product.image_url, ...(product.gallery || [])].filter(Boolean);
-  const currentPrice = product.sale_price || product.price;
 
   return (
     <div className="min-h-screen bg-[#f8f6f3]">

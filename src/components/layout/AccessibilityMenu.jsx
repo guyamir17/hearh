@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Accessibility, X, ZoomIn, ZoomOut, Contrast, Link2, Type, RotateCcw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Accessibility, X, ZoomIn, ZoomOut, Link2, Type, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AccessibilityMenu() {

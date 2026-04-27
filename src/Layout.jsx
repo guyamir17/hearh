@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useIsFetching } from '@tanstack/react-query';
 import Header from '@/components/layout/Header';

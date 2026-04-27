@@ -1,4 +1,3 @@
-import React from 'react';
 import { Mail } from 'lucide-react';
 import { staticClient } from '@/api/staticClient';
 import { useQuery } from '@tanstack/react-query';

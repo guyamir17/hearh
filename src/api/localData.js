@@ -371,8 +371,5 @@ export const initialData = {
       image_url: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=900&q=80',
       created_date: '2026-04-18T00:00:00.000Z'
     }
-  ],
-  Subscriber: [],
-  ContactMessage: [],
-  Order: []
+  ]
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { ArrowLeft, Heart, BookOpen, Users, Star } from 'lucide-react';
@@ -26,8 +25,6 @@ const defaults = {
   cta_subtitle: 'גלו את המאמרים שלנו והתחילו את המסע',
   cta_button_text: 'לכל המאמרים'
 };
-
-const featureIcons = [BookOpen, Heart, Users, Star];
 
 export default function About() {
   const { data: rawSettings } = useQuery({

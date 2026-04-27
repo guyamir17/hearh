@@ -1,4 +1,3 @@
-import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { staticClient } from '@/api/staticClient';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 // Unified Lightbulb Logo Component
 export default function LightbulbLogo({ size = 'default', variant = 'dark' }) {

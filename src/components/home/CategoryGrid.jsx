@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { BookOpen, Heart, Calendar, Brain, Users } from 'lucide-react';
@@ -152,7 +152,6 @@ export default function CategoryGrid() {
 
   const deepNavy = '#172e4a';
   const lightCream = '#faf9f7';
-  const mediumCream = '#f5f3f0';
 
   return (
     <section className="py-20 lg:py-24" style={{ backgroundColor: lightCream }}>
