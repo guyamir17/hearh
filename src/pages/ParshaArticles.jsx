@@ -14,13 +14,19 @@ export default function ParshaArticles() {
   const { data: articles, isLoading } = useQuery({
     queryKey: ['parshaArticles', book, parsha],
     queryFn: async () => {
+      const parshaVariants = Array.from(new Set([
+        parsha,
+        parsha?.replace(/ /g, '_'),
+        parsha?.replace(/_/g, ' ')
+      ].filter(Boolean)));
+
       const filter = { 
         published: true, 
         category: 'פרשת_שבוע',
-        parasha_book: book,
-        parasha_name: parsha
+        parasha_book: book
       };
-      return await staticClient.entities.Article.filter(filter, '-created_date');
+      const all = await staticClient.entities.Article.filter(filter, '-created_date');
+      return all.filter((article) => parshaVariants.includes(article.parasha_name));
     },
     enabled: !!book && !!parsha
   });

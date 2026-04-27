@@ -73,7 +73,13 @@ export default function CategoryPage({
     queryFn: async () => {
       const filter = { published: true, category };
       if (activeFilter && filterField) {
-        filter[filterField === 'book' ? 'parasha_book' : filterField === 'holiday' ? 'holiday' : 'lifecycle_event'] = activeFilter;
+        const dataField = {
+          book: 'parasha_book',
+          holiday: 'holiday',
+          event: 'lifecycle_event',
+          subcategory: 'subcategory'
+        }[filterField] || filterField;
+        filter[dataField] = activeFilter;
       }
       const all = await staticClient.entities.Article.filter(filter, '-created_date');
       return all;
